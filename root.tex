@@ -12,6 +12,8 @@
 
 \usepackage{cite}
 \usepackage{amsmath,amsfonts}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}
@@ -53,6 +55,14 @@
 \usepackage{longtable}
 \usepackage[font=singlespacing, labelfont=bf]{caption}
 %\usepackage{CV}
+\usepackage{rotating}
+\usepackage{lscape}
+
+% only single line spacing in tables
+%\BeforeBeginEnvironment{tabular}{\begin{singlespace}}
+%\AfterEndEnvironment{tabular}{\end{singlespace}}
+%\BeforeBeginEnvironment{longtable}{\begin{singlespace}}
+%\AfterEndEnvironment{longtable}{\end{singlespace}}
 
 \usepackage{enumitem}
 \newlist{inlinelist}{enumerate*}{1}
@@ -86,10 +96,10 @@
 
 \begin{document}
 
-\title{DISSERTATION TITLE}
-\author{Your Name Here}
+\title{A computational search for mutational drivers in human cancers}
+\author{Collin Tokheim}
 \degreemonth{Month}
-\degreeyear{YEAR} 
+\degreeyear{2018} 
 \dissertation
 \doctorphilosophy
 \copyrightnotice
@@ -99,6 +109,11 @@
 \include{chapter0}
 \include{chapter1}
 \include{chapter2}
+\include{chapter3}
+\include{chapter4}
+\include{chapter5}
+\include{chapter6}
+\include{chapter7}
 
 \appendix
 \include{appendixA}
