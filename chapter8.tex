@@ -1,0 +1,19 @@
+%!TEX root = root.tex
+
+\chapter{Concluding remarks}
+\label{chap:ch8}
+\chaptermark{Concluding remarks}
+
+The first confirmed human cancer driver gene, HRAS, was identified in 1982. In just the past decade, the list of likely cancer driver genes has rapidly grown. Although partly reflecting the growth in size of studies due to advances in next generation sequencing, it also reflects improvements in computational techniques. Computational methods are starting to become more robust with realistic models of how somatic mutations accumulate in cancer. Moreover, studies are now moving to understanding cancer drivers at increasing resolution -- moving from genes to individual mutations.
+
+The first part of my dissertation (Chapter 2) focuses on how to appropriately statistically model the accumulation of somatic mutations in cancer. The typical choice of modeling the background mutation rate is problematic because it is highly variable at multiple scales. However, a key insight is covariates modulate mutation rate at the scale of megabases within the genome, but nearly all genes span $<$1MB. By statistically conditioning on the total number of mutations within a gene when simulating mutations, nuisance factors influencing mutation rate that are not always measured or known are substantially lessened. This approach allows substantial flexibility in comprehensively modeling many mutational patterns indicative of positive selection in cancer.
+
+Here, I propose several new computational methods to analyze cancer drivers at different levels -- such as the gene (20/20+, Chapter 3), region (HotMAPS, Chapter 5), and mutation (CHASMplus, Chapter 6). I used these methods to interrogate fundamental questions regarding cancer driver mutations, such as their cancer type specificity, commonness or rarity, the balance and characteristics of oncogenes and tumor suppressor genes, and the likely future trajectory of cancer driver discovery. Due to the lack of a gold-standard for cancer drivers, I also developed a benchmark for cancer driver gene prediction (Chapter 4).
+
+
+
+
+Although the landscape of cancer drivers in primary cancers are progressively getting more fully explored, there remains many aspects that are still poorly understood. Sequencing untreated primary cancers gives an understanding of one time point in the natural evolutionary history of cancers. Understanding the full heterogeneity and dynamics of cancer will require sequencing both before (pre-cancerous lesions) and after (metastases). This will provide more understanding of such questions as: are there major metastasis-drivers?, and how much does the temporal ordering of driver mutations matter as opposed to overall driver mutation burden?
+
+A complete catalog of all cancer drivers, in it of it self, will not suffice. Cancer driver mutations will need to be related to their functional consequence and interaction with the microenvironment and other driver mutations. A mechanistic insight may be critical for a rational understanding of the effects of targeted drugs and optimization of drug combinations.
+

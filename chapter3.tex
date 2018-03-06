@@ -12,14 +12,14 @@ An alternative method to finding cancer drivers employs a ratiometric approach. 
 
 \section{Original 20/20 rule}
 
-The original 20/20 rule was a manually designed set of decision rules to identify cancer driver genes as either an oncogene or tumor suppressor gene \autoref{fig:2020rule} \cite{RN25}. The name derives from the rule that oncogenes should have at least 20\% of mutations being recurrent (observed more than once) and tumor suppressor genes should have at least 20\% inactivating mutations (i.e., frame shift indels, nonsense mutations, etc.). In addition, there are count thresholds that are specifically tuned for analyzing a specific version of the COSMIC database \cite{RN95}. When I applied this rule to a later version of COSMIC, it had inadequate specificity (data not shown). Moreover, scaling the count thresholds relative to database size also produced similar results, suggesting additional manual curation of results would be necessary. Consistent with this observation, the 20/20 rule had good performance at distinguishing oncogenes versus tumor suppressor genes within already pre-defined driver genes \cite{RN88}.
+The original 20/20 rule was a manually designed set of decision rules to identify cancer driver genes as either an oncogene or tumor suppressor gene (\autoref{fig:2020rule}) \cite{RN25}. The name derives from the rule that oncogenes should have at least 20\% of mutations being recurrent (observed more than once) and tumor suppressor genes should have at least 20\% inactivating mutations (i.e., frame shift indels, nonsense mutations, etc.). In addition, there are count thresholds that are specifically tuned for analyzing a specific version of the COSMIC database \cite{RN95}. When I applied this rule to a later version of COSMIC, it had inadequate specificity (data not shown). Moreover, scaling the count thresholds relative to database size also produced similar results, suggesting additional manual curation of results would be necessary. Consistent with this observation, the 20/20 rule had good performance at distinguishing oncogenes versus tumor suppressor genes within already pre-defined driver genes \cite{RN88}.
 
 \begin{figure}
   \centering
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter3/2020_rule.jpg}
-  \caption{Decision tree underlying 20/20 rule. Each gene is input into the tree and oncogene (OG) and tumor suppressor gene (TSG) score computed. Thresholds of each score and the numerator of the OG score (recurrence count) and TSG score (inactivating count) are used to determine whether a gene is an OG, TSG, or passenger.}
+  \caption[Decision tree underlying 20/20 rule.]{Decision tree underlying 20/20 rule. Each gene is input into the tree and oncogene (OG) and tumor suppressor gene (TSG) score computed. Thresholds of each score and the numerator of the OG score (recurrence count) and TSG score (inactivating count) are used to determine whether a gene is an OG, TSG, or passenger.}
   \label{fig:2020rule}
 \end{figure}
 
@@ -86,7 +86,7 @@ where $k$ is the total number of missense mutations in a gene and $p_i$ = (count
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter3/feature_importance.jpg}
-  \caption{Random Forest feature importance ranking for the 24 predictive features. The mean decrease in Gini index is plotted for each feature. Error bars indicate SD when feature importance calculation was repeated on 10 different cross-validation partitions. CCLE, Cancer Cell Line Encyclopedia \cite{RN13}; HiC, 3D chromatin interaction capture \cite{RN13}; MGAEntropy, Shannon entropy in column of a vertebrate genome 46-way alignment corresponding to location of the mutation \cite{RN90}; SNV, single-nucleotide variant; VEST, Variant Effect Scoring Tool \cite{RN30}.}
+  \caption[Random Forest feature importance ranking for the 24 predictive features.]{Random Forest feature importance ranking for the 24 predictive features. The mean decrease in Gini index is plotted for each feature. Error bars indicate SD when feature importance calculation was repeated on 10 different cross-validation partitions. CCLE, Cancer Cell Line Encyclopedia \cite{RN13}; HiC, 3D chromatin interaction capture \cite{RN13}; MGAEntropy, Shannon entropy in column of a vertebrate genome 46-way alignment corresponding to location of the mutation \cite{RN90}; SNV, single-nucleotide variant; VEST, Variant Effect Scoring Tool \cite{RN30}.}
   \label{fig:2020features}
 \end{figure}
 

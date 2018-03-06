@@ -13,7 +13,7 @@ In this chapter, I present a framework for such evaluations. The framework has f
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter4/study_size.jpg}
-  \caption{Summary of evaluation dataset. The evaluation dataset consisted of mutations spanning 34 cancer types. All included mutations were small somatic variants. Cancer types are ordered from Left to Right by number of samples, ranging from 15 for soft-tissue sarcoma to 1,093 for breast adenocarcinoma, with an average of 232 samples per cancer type. These cancer types span a wide range of solid and several liquid cancers, including multiple tissues and cell types of origin, different background mutation rates, and different numbers of available samples. For each cancer type, total mutations and number of available samples are shown.}
+  \caption[Summary of evaluation dataset.]{Summary of evaluation dataset. The evaluation dataset consisted of mutations spanning 34 cancer types. All included mutations were small somatic variants. Cancer types are ordered from Left to Right by number of samples, ranging from 15 for soft-tissue sarcoma to 1,093 for breast adenocarcinoma, with an average of 232 samples per cancer type. These cancer types span a wide range of solid and several liquid cancers, including multiple tissues and cell types of origin, different background mutation rates, and different numbers of available samples. For each cancer type, total mutations and number of available samples are shown.}
   \label{fig:benchmark_data}
 \end{figure}
 
@@ -28,7 +28,7 @@ Genes predicted by more than one method may be more likely to be drivers \cite{R
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter4/evaluation.jpg}
-  \caption{Outputs of eight driver prediction methods run through the evaluation protocol. (A) Fraction of predicted driver genes (q ≤ 0.1) that are found in the Cancer Gene Census (CGC) (downloaded April 1, 2016). Raw count of predicted driver genes indicated on Top of each bar. (B) Divergence from uniform P values, measured as mean log fold change (MLFC) between a method's observed and desired theoretical P values. (C) Number of predicted driver genes. Driver gene is defined as having Benjamini-Hochberg adjusted P value, $q \leq 0.1$. (D) Consistency of each method measured by TopDrop consistency (TDC) at depth of 100 in the method's ranked list of genes. Error bars indicate +/-1 SEM across 10 repeated splits of the data.}
+  \caption[Outputs of eight driver prediction methods run through the evaluation protocol.]{Outputs of eight driver prediction methods run through the evaluation protocol. (A) Fraction of predicted driver genes (q ≤ 0.1) that are found in the Cancer Gene Census (CGC) (downloaded April 1, 2016). Raw count of predicted driver genes indicated on Top of each bar. (B) Divergence from uniform P values, measured as mean log fold change (MLFC) between a method's observed and desired theoretical P values. (C) Number of predicted driver genes. Driver gene is defined as having Benjamini-Hochberg adjusted P value, $q \leq 0.1$. (D) Consistency of each method measured by TopDrop consistency (TDC) at depth of 100 in the method's ranked list of genes. Error bars indicate +/-1 SEM across 10 repeated splits of the data.}
   \label{fig:benchmark_result}
 \end{figure}
 
@@ -37,7 +37,7 @@ Genes predicted by more than one method may be more likely to be drivers \cite{R
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter4/method_overlap.jpg}
-  \caption{Fraction of predicted driver genes for each method by consensus among methods. Fraction of predicted drivers unique to each method, predicted by two to three methods or predicted by more than three methods are shown. A predicted driver gene is defined by Benjamini-Hochberg adjusted P value ($q \leq 0.1$)}
+  \caption[Consensus among driver gene methods]{Fraction of predicted driver genes for each method by consensus among methods. Fraction of predicted drivers unique to each method, predicted by two to three methods or predicted by more than three methods are shown. A predicted driver gene is defined by Benjamini-Hochberg adjusted P value ($q \leq 0.1$)}
   \label{fig:benchmark_method_overlap}
 \end{figure}
 
@@ -52,7 +52,7 @@ One method (20/20+) had an MLFC that was fivefold lower than the seven others (\
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter4/qq_plots.jpg}
-  \caption{Quantile-quantile plots comparing observed and theoretical P values for the tested methods. (A) Full P value range from 0 to 1. (B) Blowup of P values from 0 to 0.1. Observed P values for the methods (blue) are compared with those expected from a uniform distribution (red). Genes predicted as drivers by at least three methods were removed along with genes in the CGC. TUSON OG and TSG P values are shown separately.}
+  \caption[Quantile-quantile plots comparing observed and theoretical P values]{Quantile-quantile plots comparing observed and theoretical P values for the tested methods. (A) Full P value range from 0 to 1. (B) Blowup of P values from 0 to 0.1. Observed P values for the methods (blue) are compared with those expected from a uniform distribution (red). Genes predicted as drivers by at least three methods were removed along with genes in the CGC. TUSON OG and TSG P values are shown separately.}
   \label{fig:qq_plot}
 \end{figure}
 
@@ -95,8 +95,11 @@ A substantial limitation is TopDrop only evaluates consistency with independent 
 
 In \autoref{tab:overall_performance}, I summarize the performance of each method according to the criteria described above on the pancancer mutation data. The overall protocol is shown as a flowchart in \autoref{fig:flow_chart}. I assume that a preferable method would predict a higher fraction of driver genes that overlap with the CGC, that overlap with at least one other method, that have the least deviation from expected null P values, and that have the highest consistency. Each method is accordingly ranked by these four criteria and the average rank is shown. The top ranked methods are 20/20+, TUSON, OncodriveFML, and MutsigCV.
 
-\begin{landscape}
-\begin{tabular}{p{3cm} p{3cm} p{2cm} p{2cm} p{2cm} p{2cm} p{2cm}}
+\makeatletter
+\let\@currsize\normalsize
+\ssp
+\begin{sidewaystable}
+\begin{tabular}{p{3cm} p{3cm} p{2.25cm} p{2.25cm} p{2.25cm} p{2.25cm} p{2.25cm}}
 \toprule
   Method & No. significant genes &  CGC rank &  Consensus rank &  Pvalue rank &  Consistency rank &  Average rank \\
 \midrule
@@ -110,14 +113,17 @@ In \autoref{tab:overall_performance}, I summarize the performance of each method
   OncodriveFM &  2,600 &  8 &  6 &  7 &  5 &  6.50 \\ 
 \bottomrule
 \end{tabular}
-\end{landscape}
+\caption[Overall performance identifying cancer driver genes]{Performance of eight evaluated cancer driver gene prediction methods on the pancancer dataset of small somatic mutations}
+\label{tab:overall_performance}
+\end{sidewaystable}
+\dsp
 
 \begin{figure}
   \centering
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter4/flow_chart.jpg}
-  \caption{Flowchart of evaluation protocol. Overview of how a driver gene prediction method of interest can be evaluated. The input to the method is the pancan somatic mutation set provided in this work \cite{RN70}. The initial output from the method to be evaluated is a list of predicted driver genes with associated P values and q values. A list of significant driver genes is produced by selecting a q value threshold. To compute fraction overlap of genes predicted as significant with Cancer Gene Census (CGC) and with the eight methods evaluated here, a freeze of CGC and predictions from the eight methods are provided. These gene lists are also used to subtract out putative driver genes and yield a list of filtered P values. Method consistency is estimated by 10 iterations of splitting the pancan somatic mutation set, outputting gene P values and scores for both halves, and applying the TopDrop metric. Jupyter notebooks for computing MLFC and qq plots from the filtered P value list, and the average TDC score are available at github.}
+  \caption[Flowchart of driver gene evaluation protocol.]{Flowchart of evaluation protocol. Overview of how a driver gene prediction method of interest can be evaluated. The input to the method is the pancan somatic mutation set provided in this work \cite{RN70}. The initial output from the method to be evaluated is a list of predicted driver genes with associated P values and q values. A list of significant driver genes is produced by selecting a q value threshold. To compute fraction overlap of genes predicted as significant with Cancer Gene Census (CGC) and with the eight methods evaluated here, a freeze of CGC and predictions from the eight methods are provided. These gene lists are also used to subtract out putative driver genes and yield a list of filtered P values. Method consistency is estimated by 10 iterations of splitting the pancan somatic mutation set, outputting gene P values and scores for both halves, and applying the TopDrop metric. Jupyter notebooks for computing MLFC and qq plots from the filtered P value list, and the average TDC score are available at github.}
   \label{fig:flow_chart}
 \end{figure}
 
