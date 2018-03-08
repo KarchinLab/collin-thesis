@@ -6,7 +6,7 @@
 
 \section{Introduction}
 
-The first exomic analyses attempted to identify candidate driver genes as those having more mutations than expected from some presumed background somatic mutation rate, corrected for base context, gene size, and other variables \cite{RN78, RN4}. Subsequent work has considerably refined the variables involved in determining whether a gene is more mutated in cancers than expected by chance. This has led to a variety of "significantly mutated gene" methods that adjust for covariates such as replication timing and gene expression as well as including more sophisticated metrics of mutational base contexts \cite{RN13, RN43}. Although methods have been extended to utilize gene expression \cite{RN80, RN84, RN81, RN83, RN79, RN82}, I will focus solely on driver gene analysis based on somatic point mutations.
+The first exomic analyses attempted to identify candidate driver genes as those having more mutations than expected from some presumed background somatic mutation rate, corrected for base context, gene size, and other variables \cite{RN78, RN4}. Subsequent work has considerably refined the variables involved in determining whether a gene is more mutated in cancers than expected by chance. This has led to a variety of \q{significantly mutated gene} methods that adjust for covariates such as replication timing and gene expression as well as including more sophisticated metrics of mutational base contexts \cite{RN13, RN43}. Although methods have been extended to utilize gene expression \cite{RN80, RN84, RN81, RN83, RN79, RN82}, I will focus solely on driver gene analysis based on somatic point mutations.
 
 An alternative method to finding cancer drivers employs a ratiometric approach. Rather than attempting to determine whether the observed mutation rate of a gene in cancers is higher than expected by chance, these methods simply assess the composition of mutations normalized by the total mutations in a gene. The ratiometric 20/20 rule \cite{RN25} evaluates the proportion of inactivating mutation and recurrent missense mutations in a gene of interest. Other ratiometric approaches use mutation functional impact bias \cite{RN86, RN53}, mutational clustering patterns \cite{RN87, RN54, RN71}, or patterns of mutation composition \cite{RN71}. Here, I describe a machine-learning-based, ratiometric method (20/20+) that formalizes and extends the original 20/20 rule and enables automated integration of multiple features of positive selection.
 
@@ -31,13 +31,13 @@ Using machine learning, 20/20+ trains a random forest to leverage many features 
 
 \subsubsection{Decision tree}
 
-Since my focus will be on classification, a decision tree $\pi(X)$ will return 1 if the prediction is a cancer driver and 0 for a passenger. A decision tree is constructed from a set of possible questions $Q=\{Q_1,…,Q_N\}$, with a question taking the following form,
+Since my focus will be on classification, a decision tree $\pi(X)$ will return 1 if the prediction is a cancer driver and 0 for a passenger. A decision tree is constructed from a set of possible questions $Q=\{Q_1,\ldots,Q_N\}$, with a question taking the following form,
 
 \begin{equation}
 Q_.(X)=I_{X_i \leq c}
 \end{equation}
 
-where $I$ is the indicator function, $X_i$ is the i'th feature value, and $c$ is a constant. The question asked by a decision tree depends on the previous question asked. To keep track of order of questions, the index of the first question will be denoted $\rho_1$, where $\rho_1∈\{1…N\}$. The second question will therefore be a function of the answer from the first question, $\rho_2=\rho_2(a_1)$, where $a_1=Q_{\rho_1}$. More generally there is a series of questions $\beta_n=\{Q_{\rho_1}=a_1,…,Q_{\rho_{n-1}}=a_{n-1}\}$ prior to the n'th question.
+where $I$ is the indicator function, $X_i$ is the i'th feature value, and $c$ is a constant. The question asked by a decision tree depends on the previous question asked. To keep track of order of questions, the index of the first question will be denoted $\rho_1$, where $\rho_1\in\{1\ldots N\}$. The second question will therefore be a function of the answer from the first question, $\rho_2=\rho_2(a_1)$, where $a_1=Q_{\rho_1}$. More generally there is a series of questions $\beta_n=\{Q_{\rho_1}=a_1,\ldots,Q_{\rho_{n-1}}=a_{n-1}\}$ prior to the n'th question.
 
 Each question will split training examples depending on the answer to the question. The goal of the decision tree is to utilize questions that reduce the uncertainty in the distribution of class labels. I will regard the distribution of class labels as the probability of observing a class label given the answer to a question n as follows,
 
@@ -61,7 +61,7 @@ where $l\in \{0,1\}$ is the class label and $\beta_*$ contains the history of an
 
 \subsubsection{Random Forest}
 
-A random forest is an ensemble of many randomized decision trees \cite{RN41, RN40}, where each tree is trained on a random selection of training set examples and candidate features, via a recursive splitting process \cite{RN89}. This involves constructing each tree $\pi_j$ from a bootstrapped sample of the training data $D_j=\{(X(i),Y(i)),…\}_{i=1..m}$. Then instead of allowing all questions for each split, a random subset of questions is used $Q^s\subset Q$, were the number of features $s$ is usually taken to be proportional to the square root of the total features p,  $|s|=\sqrt{p}$. Lastly, once $J$ decision trees are constructed, random forest predictions result in a score between 0 and 1 that reflects the proportion of trees agreeing with the class label of cancer driver:
+A random forest is an ensemble of many randomized decision trees \cite{RN41, RN40}, where each tree is trained on a random selection of training set examples and candidate features, via a recursive splitting process \cite{RN89}. This involves constructing each tree $\pi_j$ from a bootstrapped sample of the training data $D_j=\{(X(i),Y(i)),\ldots\}_{i=1..m}$. Then instead of allowing all questions for each split, a random subset of questions is used $Q^s\subset Q$, were the number of features $s$ is usually taken to be proportional to the square root of the total features p,  $|s|=\sqrt{p}$. Lastly, once $J$ decision trees are constructed, random forest predictions result in a score between 0 and 1 that reflects the proportion of trees agreeing with the class label of cancer driver:
 
 \begin{equation}
 f(X) = \frac{1}{J}\sum_{j=1}^J{\pi_j(X)}
@@ -73,7 +73,7 @@ Although the above mathematical description of a random forest was in terms of t
 
 \subsubsection{Features}
 
-I designed a set of 24 predictive features described in \autoref{table:feature_tab} and whose feature importance is shown in \autoref{fig:2020features}, as assessed by the mean decrease in gini impurity. Many of the features are components of the 20/20 rule OG and TSG scores, and I included several ratiometric features not in the original 20/20 rule, for example, ratio of missense to silent mutations, as well as features that represented mutation functional impact and gene importance. Normalized missense entropy, a measure of positional clustering, was calculated as follows:
+I designed a set of 24 predictive features and whose feature importance is shown in \autoref{fig:2020features}, as assessed by the mean decrease in gini impurity. Many of the features are components of the 20/20 rule OG and TSG scores, and I included several ratiometric features not in the original 20/20 rule, for example, ratio of missense to silent mutations, as well as features that represented mutation functional impact and gene importance. Normalized missense entropy, a measure of positional clustering, was calculated as follows:
 
 \begin{equation}
 E_k = \frac{\sum_i{p_i\log_2{p_i}}}{\log_2{k}}
@@ -100,13 +100,13 @@ Each gene was scored as the fraction of trees that voted for oncogene, tumor sup
 
 \section{Statistical significance}
 
-The statistical significance of each gene score was computed with an extension of the Monte Carlo simulation algorithm described in \autoref{sec:monte_carlo}. For each gene, the Monte Carlo simulation was repeated 10 times, and for each simulation all 24 features were computed. In this process, protein interaction network features (degree and betweenness) were, additionally, permuted as a pair. The features of gene length, replication timing, HiC value, and average Cancer Cell Line Encyclopedia (CCLE) gene expression were not altered. Next, each "simulated" gene was scored with the Random Forest previously trained on the real data. The resulting OG, TSG, and driver scores for all simulated genes were used as an empirical null distribution. To compute a P value for a gene score, I used the fraction of simulated genes with a score equal to or greater than the score. P values were adjusted by the Benjamini-Hochberg method \cite{RN94} for multiple hypotheses. I compute a Benjamini-Hochberg q-value as follows,
+The statistical significance of each gene score was computed with an extension of the Monte Carlo simulation algorithm described in \autoref{sec:monte_carlo}. For each gene, the Monte Carlo simulation was repeated 10 times, and for each simulation all 24 features were computed. In this process, protein interaction network features (degree and betweenness) were, additionally, permuted as a pair. The features of gene length, replication timing, HiC value, and average Cancer Cell Line Encyclopedia (CCLE) gene expression were not altered. Next, each \q{simulated} gene was scored with the Random Forest previously trained on the real data. The resulting OG, TSG, and driver scores for all simulated genes were used as an empirical null distribution. To compute a P value for a gene score, I used the fraction of simulated genes with a score equal to or greater than the score. P values were adjusted by the Benjamini-Hochberg method \cite{RN94} for multiple hypotheses. I compute a Benjamini-Hochberg q-value as follows,
 
 \begin{equation}
 q(i) = \min{\left(\min_{i..n}{\frac{p(i)}{i/n}}, 1 \right)}
 \end{equation}
 
-where $p(i)$ is the i'th smallest p-value, $q(i)$ is the corresponding q-value, n is the total number of p-values, and the cumulative minimum from index n to i. Consistent with other driver gene prediction methods, I considered a gene to be significant ($q \leq 0.1$) if any of the OG, TSG, or driver scores were significant. The strategy of converting p-values to q-values is for convenience and does not change the significant p-values by the procedure originally outlined by Benjamini and Hochberg \cite{RN94}.
+where $p(i)$ is the i'th smallest p-value, $q(i)$ is the corresponding q-value, n is the total number of p-values, and $\min_{i..n}$ is the cumulative minimum from index n to i. Consistent with other driver gene prediction methods, I considered a gene to be significant ($q \leq 0.1$) if any of the OG, TSG, or driver scores were significant. The strategy of converting p-values to q-values is for convenience and does not change the significant p-values by the procedure originally outlined by Benjamini and Hochberg \cite{RN94}.
 
 \section{Conclusions}
 

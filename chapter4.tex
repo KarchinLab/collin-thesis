@@ -47,13 +47,18 @@ Given the lack of agreement among these various methods, I compared P values rep
 
 One method (20/20+) had an MLFC that was fivefold lower than the seven others (\autoref{fig:benchmark_result}B). I also compared observed and theoretical P values with quantile-quantile plots, which provide a detailed view of P value behavior (\autoref{fig:qq_plot}A). 20/20+ P values had by far the best agreement with theoretical expectation across the entire range of supported values. In the critical range typically used to assess statistical significance ($P \leq 0.05$), OncodriveClust, OncodriveFM, OncodriveFML, ActiveDriver, and MuSiC substantially underestimated P values, whereas MutsigCV substantially overestimated them (\autoref{fig:qq_plot}B). For methods that combine multiple P values for each gene, failure to model correlation between P values may be responsible for this underestimation. The null P value distributions at the other end of the distribution (0.2-1.0) should also be uniform and in this case independent of the actual number of true driver genes.
 
-\begin{figure}
-  \centering
+\begin{figure}[b!]
   \makeatletter
   \let\@currsize\normalsize
   \includegraphics[width=0.9\linewidth]{figures/chapter4/qq_plots.jpg}
-  \caption[Quantile-quantile plots comparing observed and theoretical P values]{Quantile-quantile plots comparing observed and theoretical P values for the tested methods. (A) Full P value range from 0 to 1. (B) Blowup of P values from 0 to 0.1. Observed P values for the methods (blue) are compared with those expected from a uniform distribution (red). Genes predicted as drivers by at least three methods were removed along with genes in the CGC. TUSON OG and TSG P values are shown separately.}
+  \caption[Quantile-quantile plots comparing observed and theoretical P values]{(Caption next page.)}
   \label{fig:qq_plot}
+\end{figure}
+\addtocounter{figure}{-1}
+\begin{figure} [t!]
+  \makeatletter
+  \let\@currsize\normalsize
+  \caption[(continued) Quantile-quantile plots comparing observed and theoretical P values]{(Figure: previous page) Quantile-quantile plots comparing observed and theoretical P values for the tested methods. (A) Full P value range from 0 to 1. (B) Blowup of P values from 0 to 0.1. Observed P values for the methods (blue) are compared with those expected from a uniform distribution (red). Genes predicted as drivers by at least three methods were removed along with genes in the CGC. TUSON OG and TSG P values are shown separately.}
 \end{figure}
 
 \subsection{MLFC and mathematical justification}
@@ -85,9 +90,9 @@ Statistical methods suffer from both systematic and random prediction errors. Wh
 \subsection{TopDrop consistency and limitations}
 \label{sec:tdc_limitations}
 
-Consistency assesses stability in gene ranking. Each method was applied to 10 repeated random splits, consisting of two disjoint halves of the full data. For pancancer assessment, the proportion of samples from each cancer type was maintained in each half. Disjoint halves were scored separately by each method, and genes were ranked from low to high P values. For a fair comparison between methods, I considered a specific depth of top-ranked genes, rather than a fixed q value threshold. This is because consistency becomes harder to achieve as the number of top-ranked genes gets larger. For example, a method that predicts 100 significant genes at $q \leq 0.1$ has an advantage in consistency over a method that predicts 1,000 significant genes at that threshold. I define $TopDrop consistency=|I_d |/d$, where $d$ is the designated depth of interest for the ranked gene list and $I_d$ is the TopDrop intersection, $I_d=A^{(1:d)} \cap B^{(1:2d)}$, defined as the intersection between predictions from the two random halves "A" and "B" such that the top d genes in "A" do not fall past twice the designated depth (2d) in "B."
+Consistency assesses stability in gene ranking. Each method was applied to 10 repeated random splits, consisting of two disjoint halves of the full data. For pancancer assessment, the proportion of samples from each cancer type was maintained in each half. Disjoint halves were scored separately by each method, and genes were ranked from low to high P values. For a fair comparison between methods, I considered a specific depth of top-ranked genes, rather than a fixed q value threshold. This is because consistency becomes harder to achieve as the number of top-ranked genes gets larger. For example, a method that predicts 100 significant genes at $q \leq 0.1$ has an advantage in consistency over a method that predicts 1,000 significant genes at that threshold. I define $TopDrop consistency=|I_d |/d$, where $d$ is the designated depth of interest for the ranked gene list and $I_d$ is the TopDrop intersection, $I_d=A^{(1:d)} \cap B^{(1:2d)}$, defined as the intersection between predictions from the two random halves \q{A} and \q{B} such that the top d genes in \q{A} do not fall past twice the designated depth (2d) in \q{B.}
 
-I expect that all methods will lose statistical power and have greater random sampling error when they are predicting on a dataset that has been split in half. Therefore, I chose to allow genes to fall twice as far down the list in the "B" half of the split, to better distinguish random effects and methods with intrinsically low consistency.
+I expect that all methods will lose statistical power and have greater random sampling error when they are predicting on a dataset that has been split in half. Therefore, I chose to allow genes to fall twice as far down the list in the \q{B} half of the split, to better distinguish random effects and methods with intrinsically low consistency.
 
 A substantial limitation is TopDrop only evaluates consistency with independent identically distributed samples from the same data set. A better alternative would be to evaluate cross-study consistency \cite{RN157}, as there may be multiple reasons why findings in one study would not generalize to another. However, from a practical perspective, I can only use data currently available to evaluate performance.
 
