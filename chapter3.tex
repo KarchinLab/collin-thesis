@@ -76,7 +76,7 @@ Although the above mathematical description of a random forest was in terms of t
 I designed a set of 24 predictive features and whose feature importance is shown in \autoref{fig:2020features}, as assessed by the mean decrease in gini impurity. Many of the features are components of the 20/20 rule OG and TSG scores, and I included several ratiometric features not in the original 20/20 rule, for example, ratio of missense to silent mutations, as well as features that represented mutation functional impact and gene importance. Normalized missense entropy, a measure of positional clustering, was calculated as follows:
 
 \begin{equation}
-E_k = \frac{\sum_i{p_i\log_2{p_i}}}{\log_2{k}}
+E_k = \frac{-\sum_i{p_i\log_2{p_i}}}{\log_2{k}}
 \end{equation}
 
 where $k$ is the total number of missense mutations in a gene and $p_i$ = (count of missense mutations in the I'th codon)/k. Three of the 24 features represented p-values and were calculated using the monte carlo simulation described in \autoref{sec:monte_carlo}.
