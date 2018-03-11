@@ -16,9 +16,9 @@ Here, I present HotMAPS (Hotspot Missense mutation Areas in Protein Structure), 
 
 \section{HotMAPS algorithm}
 
-Standard clustering algorithms are not well suited for detecting rare clustering patterns in a large number of problems. I considered many standard clustering algorithms for clustering mutations in protein structure \cite{RN117, RN114, RN115, RN116}, but each has substantial weaknesses. Methods like K-means and spectral clustering require the number of clusters to be specified as a parameter, but the number of clusters is not necessarily the same for every protein structure. In practice, the \q{elbow-method} is used where the number of clusters is chosen manually by examining where there is a noticeable flattening in performance as the number of clusters is increased \cite{RN118}. However, when applying clustering to ~65,000 protein structures, manual procedures are infeasible. Even if the clustering algorithm doesn't need the number of clusters as a parameter, such as affinity propagation \cite{RN114} or DBSCAN \cite{RN117}, they generally assume the minimum number of clusters is one. Since driver mutations are rare relative to all mutations, most protein structures should have no clusters due to the clustering of driver mutations.
+Standard clustering algorithms are not well suited for detecting rare clustering patterns in a large number of problems. I considered many standard clustering algorithms for clustering mutations in protein structure \cite{RN117, RN114, RN115, RN116}, but each has substantial weaknesses. Methods like K-means and spectral clustering require the number of clusters to be specified as a parameter, but the number of clusters is not necessarily the same for every protein structure. In practice, the \q{elbow-method} is used where the number of clusters is chosen manually by examining where there is a noticeable flattening in performance as the number of clusters is increased \cite{RN118}. However, when applying clustering to $\sim$65,000 protein structures, manual procedures are infeasible. Even if the clustering algorithm doesn't need the number of clusters as a parameter, such as affinity propagation \cite{RN114} or DBSCAN \cite{RN117}, they generally assume the minimum number of clusters is one. Since driver mutations are rare relative to all mutations, most protein structures should have no clusters due to the clustering of driver mutations.
 
-There are also application specific concerns for clustering mutations in protein structure. A clustering algorithm would preferably adjust for the topology of a protein structure as this affects where mutations could possibly be located. Additionally, since protein structure may contain multiple identical protein subunits, a clustering algorithm needs to compensate for the non-independence of mutations. Lastly, the algorithm should ideally statistically adjust for potential false discovery of clusters due to the large number of clustering problems (~65,000 protein structures). 
+There are also application specific concerns for clustering mutations in protein structure. A clustering algorithm would preferably adjust for the topology of a protein structure as this affects where mutations could possibly be located. Additionally, since protein structure may contain multiple identical protein subunits, a clustering algorithm needs to compensate for the non-independence of mutations. Lastly, the algorithm should ideally statistically adjust for potential false discovery of clusters due to the large number of clustering problems ($\sim$65,000 protein structures). 
 
 The HotMAPS algorithm was developed to address all of these noted limitations and is described below (\autoref{fig:hotmaps_algorithm}).
 
@@ -161,7 +161,25 @@ The larger size and mutational diversity of hotspot regions in tumor suppressor 
 
 For a well-controlled comparison of 3D and 1D hotspot region detection, I applied a 1D version of our method to the protein chain sequences of the same set of PDB protein bioassemblies and theoretical protein structure models to detect nonuniform clustering patterns on primary protein sequence. Seventy-two percent of hotspot regions identified in 3D were identifiable in 1D.
 
-Next, I compared the number of hotspot regions identified in OGs and TSGs. I considered regions identified in 3D only, in both 3D and 1D, and in 1D only. Using the bona fide OGs and TSGs (Table 1), there were significantly more OG regions that TSG regions identified by the 1D algorithm (P = 0.03; one-sided Fisher exact test). The 1D-only version of the algorithm detected 5 OG and 2 TSG regions; 1D further detected an additional 25 OG and 7 TSG regions that were also identified by the 3D algorithm. The 3D algorithm identified an additional 4 OG and 6 TSG regions. To increase our power, I repeated this test again using the bona fide OGs and TSGs plus additional regions in five candidate OGs and TSGs reported in the literature (OGs were FSIP2, MTOR, RANBP2, CHEK2, and MAPK1; TSGs were RASA1, SMARCA2, KEAP1, CUL1, TGFBR2; all are listed and cited in Table 2), yielding increased statistical significance (P = 0.009, one-sided Fisher exact test). The results suggest that 1D detection methods may be better suited to detecting regions in OGs rather than TSGs.
+Next, I compared the number of hotspot regions identified in OGs and TSGs. I considered regions identified in 3D only, in both 3D and 1D, and in 1D only. Using the bona fide OGs and TSGs (\autoref{tab:hotmaps_main}), there were significantly more OG regions that TSG regions identified by the 1D algorithm (P = 0.03; one-sided Fisher exact test). The 1D-only version of the algorithm detected 5 OG and 2 TSG regions; 1D further detected an additional 25 OG and 7 TSG regions that were also identified by the 3D algorithm. The 3D algorithm identified an additional 4 OG and 6 TSG regions. To increase our power, I repeated this test again using the bona fide OGs and TSGs plus additional regions in five candidate OGs and TSGs reported in the literature (OGs were FSIP2, MTOR, RANBP2, CHEK2, and MAPK1; TSGs were RASA1, SMARCA2, KEAP1, CUL1, TGFBR2; all are listed and cited in \autoref{tab:hotmaps_second}), yielding increased statistical significance (P = 0.009, one-sided Fisher exact test). The results suggest that 1D detection methods may be better suited to detecting regions in OGs rather than TSGs.
+
+\begin{table}
+  \centering
+  \makeatletter
+  \let\@currsize\normalsize
+  \includegraphics[width=\linewidth]{tables/chapter5/HotMAPS_main_table.pdf}
+  \caption[3D HotMAPS regions in known cancer genes]{Cancer genes with 3D HotMAPS regions identified in TCGA tumor types and in landscapes benchmark or cancer gene census}
+  \label{tab:hotmaps_main}
+\end{table}
+
+\begin{table}
+  \centering
+  \makeatletter
+  \let\@currsize\normalsize
+  \includegraphics[width=\linewidth]{tables/chapter5/HotMAPS_second_table.pdf}
+  \caption[3D HotMAPS regions with supportive evidence]{Genes with HotMAPS regions identified in TCGA tumor types}
+  \label{tab:hotmaps_second}
+\end{table}
 
 A further problem with sequence-based 1D hotspot region detection is that larger regions detectable in 3D may be only partially characterized and/or split into multiple pieces. \autoref{fig:benefits_3d_space} shows an example of a TSG hotspot region in FBXW7 found in 3D by HotMAPS that has been split into two pieces by the 1D algorithm. In 1D protein sequence, residue 465 is not close enough to residues 502 and 505 to be identified in one hotspot region. On the 3D protein structure of FBXW7 (PDB code 2OVQ), the three residues are spatially close and a single hotspot region is detected.
 
