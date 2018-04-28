@@ -6,7 +6,7 @@
 
 \section{Introduction}
 
-The first exomic analyses attempted to identify candidate driver genes as those having more mutations than expected from some presumed background somatic mutation rate, corrected for base context, gene size, and other variables \cite{RN78, RN4}. Subsequent work has considerably refined the variables involved in determining whether a gene is more mutated in cancers than expected by chance. This has led to a variety of \q{significantly mutated gene} methods that adjust for covariates such as replication timing and gene expression as well as including more sophisticated metrics of mutational base contexts \cite{RN13, RN43}. Although methods have been extended to utilize gene expression \cite{RN80, RN84, RN81, RN83, RN79, RN82}, I will focus solely on driver gene analysis based on somatic point mutations.
+The first exomic analyses attempted to identify candidate driver genes as those having more mutations than expected from some presumed background somatic mutation rate, corrected for base context, gene size, and other variables \cite{RN78, RN4}. Subsequent work has considerably refined the variables involved in determining whether a gene is more mutated in cancers than expected by chance. This has led to a variety of \q{significantly mutated gene} methods that adjust for covariates such as replication timing and gene expression as well as including more sophisticated metrics of mutational base contexts \cite{RN13, RN43}. Although methods have been extended to utilize gene expression to identify cancer drivers \cite{RN80, RN84, RN81, RN83, RN79, RN82}, I will focus solely on driver gene analysis based on somatic point mutations.
 
 An alternative method to finding cancer drivers employs a ratiometric approach. Rather than attempting to determine whether the observed mutation rate of a gene in cancers is higher than expected by chance, these methods simply assess the composition of mutations normalized by the total mutations in a gene. The ratiometric 20/20 rule \cite{RN25} evaluates the proportion of inactivating mutation and recurrent missense mutations in a gene of interest. Other ratiometric approaches use mutation functional impact bias \cite{RN86, RN53}, mutational clustering patterns \cite{RN87, RN54, RN71}, or patterns of mutation composition \cite{RN71}. Here, I describe a machine-learning-based, ratiometric method (20/20+) that formalizes and extends the original 20/20 rule and enables automated integration of multiple features of positive selection.
 
@@ -45,7 +45,7 @@ Each question will split training examples depending on the answer to the questi
 p_k=Pr⁡(Y=1|Q_{ρ_n}=k,\beta_n)
 \end{equation}
 
-where $k$ is the answer to the question and $p_k$ is the proportion of labeled drivers. For the decision tree algorithm, the best question defined by the gini impurity is used at each step:
+where $k$ is the answer to the question and $p_k$ is the proportion of labeled drivers. For the decision tree algorithm, the best question defined by minimizing the expected gini impurity at each step:
 
 \begin{equation}
 \rho_n=\argmin_{1 \leq b \leq N}{2\sum_{k=0}^{1}{Pr[Q_b=k]p_k(1-p_k)}}
@@ -73,7 +73,7 @@ Although the above mathematical description of a random forest was in terms of t
 
 \subsubsection{Features}
 
-I designed a set of 24 predictive features and whose feature importance is shown in \autoref{fig:2020features}, as assessed by the mean decrease in gini impurity. Many of the features are components of the 20/20 rule OG and TSG scores, and I included several ratiometric features not in the original 20/20 rule, for example, ratio of missense to silent mutations, as well as features that represented mutation functional impact and gene importance. Normalized missense entropy, a measure of positional clustering, was calculated as follows:
+I designed a set of 24 predictive features and whose feature importance is shown in \autoref{fig:2020features}, as assessed by the mean decrease in gini impurity. A description of the features can also be found in \autoref{tab:2020features}. Many of the features are components of the 20/20 rule OG and TSG scores, and I included several ratiometric features not in the original 20/20 rule, for example, ratio of missense to silent mutations, as well as features that represented mutation functional impact and gene importance. Normalized missense entropy, a measure of positional clustering, was calculated as follows:
 
 \begin{equation}
 E_k = \frac{-\sum_i{p_i\log_2{p_i}}}{\log_2{k}}
@@ -90,9 +90,18 @@ where $k$ is the total number of missense mutations in a gene and $p_i$ = (count
   \label{fig:2020features}
 \end{figure}
 
+\begin{table}
+  \centering
+  \makeatletter
+  \let\@currsize\normalsize
+  \includegraphics[width=\linewidth]{tables/chapter3/2020plus_features.pdf}
+  \caption[Description of features used in 20/20+.]{Features used in 20/20+.  Features use mutations that are small somatic variants, including single base substitutions and small insertions/deletions. CCLE = cancer cell line encyclopedia.  SNV = single nucleotide variant.  SNVBox = database of features of single nucleotide variants.  Biogrid = database of gene networks.}
+  \label{tab:2020features}
+\end{table}
+
 \subsubsection{Handling class imbalance}
 
-With only 54 OGs and 71 TSGs labeled by the original 20/20 rule, the number of passenger genes far exceeds the number of labeled driver genes, creating a problematic class imbalance \cite{RN93}. I use a subsampling approach, previously recommended for random forests \cite{RN92}, in which for my case the passenger genes are sampled at a 1:1 ratio to OGs plus TSGs. To compensate for the remaining OG and TSG imbalance, the Random Forest is trained with class weights inversely proportional to the sampled frequency of the class. Predictions were made with a random forest of 200 trees. The number of trees only had minor impact on the overall performance. I used 10-fold gene hold-out cross-validation to avoid overfitting. The procedure of 10-fold cross-validation was repeated five times (1,000 trees in total), and the resulting scores from each gene were aggregated to limit minor fluctuations in scores due to randomization in the cross-validation folds.
+With only 54 OGs and 71 TSGs labeled by the original 20/20 rule, the number of passenger genes far exceeds the number of labeled driver genes, creating a problematic class imbalance \cite{RN93}. I use a subsampling approach, previously recommended for random forests \cite{RN92}, in which for my case the passenger genes are sampled at a 1:1 ratio to OGs plus TSGs. To compensate for the remaining OG and TSG imbalance, the Random Forest is trained with class weights inversely proportional to the sampled frequency of the class. Predictions were made with a random forest of 200 trees. The number of trees only had minor impact on the overall performance. I used 10-fold gene hold-out cross-validation to avoid overfitting. Cross-validation was used in preference over out-of-bag measurements of performance provided directly from the random forest because it generalizes better to scenarios with biologically correlated predictions. The procedure of 10-fold cross-validation was repeated five times (1,000 trees in total), and the resulting scores from each gene were aggregated to limit minor fluctuations in scores due to randomization in the cross-validation folds.
 
 \subsubsection{Random forest prediction}
 
@@ -110,5 +119,5 @@ where $p(i)$ is the i'th smallest p-value, $q(i)$ is the corresponding q-value, 
 
 \section{Conclusions}
 
-In this chapter, I developed a new method, 20/20+, which addresses two major issues with the original 20/20 rule: use of a limited number of features and a lack of a statistically principled threshold to limit false positives. 20/20+ uses the random forest algorithm to make predictions using a non-linear combination of features. Importantly, 20/20+ uses ratiometric features to normalize artefactual differences between cancer types and regions of the genome. Because Random Forests do not intrinsically include hypothesis testing techniques, I used simulated mutations to assess the statistical significance of scores. P-values were estimated from a simulated null distribution, controlling for sequence composition, and corrected for multiple testing with the Benjamini-Hochberg method \cite{RN94}. The application and benchmarking of 20/20+ will be considered in Chapters 4 and 7.
+In this chapter, I developed a new method, 20/20+, which addresses two major issues with the original 20/20 rule: use of a limited number of features and a lack of a statistically principled threshold to limit false positives. 20/20+ uses the random forest algorithm to make predictions using a non-linear combination of features. Importantly, 20/20+ uses ratiometric features to normalize artifactual differences between cancer types and regions of the genome. Because Random Forests do not intrinsically include hypothesis testing techniques, I used simulated mutations to assess the statistical significance of scores. P-values were estimated from a simulated null distribution, controlling for sequence composition, and corrected for multiple testing with the Benjamini-Hochberg method \cite{RN94}. The application and benchmarking of 20/20+ will be considered in Chapters 4 and 7.
 
